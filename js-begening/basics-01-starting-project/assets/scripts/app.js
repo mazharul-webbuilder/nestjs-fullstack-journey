@@ -13,37 +13,50 @@ function getUserInput() {
 }
 
 // Generate and writes calculation log
-function add() {
+function calculateResult(calculationType) {
     const enteredNumber = getUserInput();
+
+    if (calculationType !== 'ADD' &&
+        calculationType !== 'SUBTRACT' &&
+        calculationType !== 'MULTIPLY' &&
+        calculationType !== 'DIVIDE' ||
+        enteredNumber === 0
+    ){
+        return;
+    }
     const initialResult = currentResult;
-    currentResult += enteredNumber;
-    createAndWriteOutput('+', initialResult, enteredNumber); // from vendor file
-    writeToLog('ADD', initialResult, enteredNumber, currentResult)
+    let mathOperator;
+    if(calculationType === 'ADD'){
+        currentResult += enteredNumber;
+        mathOperator = '+';
+    } else if (calculationType === 'SUBTRACT') {
+        currentResult -= enteredNumber;
+        mathOperator = '-';
+    } else if(calculationType === 'MULTIPLY'){
+        currentResult *= enteredNumber;
+        mathOperator = '*';
+    } else if (calculationType === 'DIVIDE'){
+        currentResult /= enteredNumber;
+        mathOperator = '/';
+    }
+
+    createAndWriteOutput(mathOperator, initialResult, enteredNumber); // from vendor file
+    writeToLog(calculationType, initialResult, enteredNumber, currentResult)
+}
+function add() {
+    calculateResult('ADD')
 }
 
 function substact() {
-    const enteredNumber = getUserInput();
-    const initialResult = currentResult;
-    currentResult -= enteredNumber;
-    createAndWriteOutput('-', initialResult, enteredNumber);
-    writeToLog('SUBTRACT', initialResult, enteredNumber, currentResult)
-
+    calculateResult('SUBTRACT')
 }
 
 function multiply() {
-    const enteredNumber = getUserInput();
-    const initialResult = currentResult;
-    currentResult *= enteredNumber;
-    createAndWriteOutput('*', initialResult, enteredNumber);
-    writeToLog('MULTIPLY', initialResult, enteredNumber, currentResult)
+    calculateResult('MULTIPLY')
 }
 
 function division() {
-    const enteredNumber = getUserInput();
-    const initialResult = currentResult;
-    currentResult /= enteredNumber;
-    createAndWriteOutput('/', initialResult, enteredNumber);
-    writeToLog('DIVISION', initialResult, enteredNumber, currentResult)
+    calculateResult('DIVIDE')
 }
 
 function createAndWriteOutput(operator, resultBeforeCalc, calcNumber) {
