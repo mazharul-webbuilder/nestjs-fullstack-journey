@@ -28,3 +28,12 @@ person.great()
 startGameBtn.addEventListener('click', function (){
 
 })
+
+// Rest Parameter
+const sump = (a, b,  ...numbers) => {
+    let result;
+    for (const num of numbers){
+        result += num
+    }
+    return result
+}
