@@ -12,10 +12,7 @@ let GameIsRunning = false
 
 const getPlayerChoice = function () {
     const selection = prompt(`${SELECTION_ROCK}, ${SELECTION_PAPER} or ${SELECTION_SCISSORS}?`, '').toUpperCase()
-    if (
-        selection !== SELECTION_ROCK &&
-        selection !== SELECTION_PAPER &&
-        selection !== SELECTION_SCISSORS) {
+    if (selection !== SELECTION_ROCK && selection !== SELECTION_PAPER && selection !== SELECTION_SCISSORS) {
 
     } else {
         alert(`Invalid Choice! We chose ${DEFAULT_USER_CHOICE} for you`)
@@ -39,15 +36,26 @@ const getComputerChoice = function () {
 const getWinner = function (cChoice, pChoice) {
     if (cChoice === pChoice) {
         return RESULT_DRAW
-    } else if (cChoice === SELECTION_ROCK && pChoice === SELECTION_PAPER
-        || cChoice === SELECTION_PAPER && pChoice === SELECTION_SCISSORS
-        || cChoice === SELECTION_SCISSORS && pChoice === SELECTION_ROCK
-    ) {
+    } else if (cChoice === SELECTION_ROCK && pChoice === SELECTION_PAPER || cChoice === SELECTION_PAPER && pChoice === SELECTION_SCISSORS || cChoice === SELECTION_SCISSORS && pChoice === SELECTION_ROCK) {
         return RESULT_PLAYER_WINS;
     } else {
         return RESULT_COMPUTER_WINS;
     }
 }
+// Arrow Function
+const getWinnerWithArrowFunction = (cChoice, pChoice) => {
+    return cChoice === pChoice ? RESULT_DRAW : (cChoice === SELECTION_ROCK && pChoice === SELECTION_PAPER || cChoice === SELECTION_PAPER && pChoice === SELECTION_SCISSORS || cChoice === SELECTION_SCISSORS && pChoice === SELECTION_ROCK) ? RESULT_PLAYER_WINS : RESULT_COMPUTER_WINS;
+}
+
+const getWinnerWithArrowFunctionWithOneStatement = (cChoice, pChoice) =>
+    cChoice === pChoice
+        ? RESULT_DRAW :
+        (cChoice === SELECTION_ROCK && pChoice === SELECTION_PAPER ||
+            cChoice === SELECTION_PAPER && pChoice === SELECTION_SCISSORS ||
+            cChoice === SELECTION_SCISSORS && pChoice === SELECTION_ROCK)
+            ? RESULT_PLAYER_WINS
+            : RESULT_COMPUTER_WINS;
+
 
 startGameBtn.addEventListener('click', function () {
     if (GameIsRunning) {
