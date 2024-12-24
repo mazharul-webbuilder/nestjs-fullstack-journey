@@ -10,3 +10,8 @@ function errorHandling(){
 }
 
 errorHandling()
+
+
+// Features
+// 1. No major new features introduced
+// 2. Bug Fix
