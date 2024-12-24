@@ -77,6 +77,7 @@ console.log(cat.speak()) // Output Cat make sounds
 // Example 2
 function Student(name){
     this.name = name
+
 }
 
 Student.prototype.age = 26
