@@ -88,3 +88,14 @@ Student.prototype.institute = function () {
 var student1 = new Student('Zayaan')
 console.log(student1.age)
 console.log(student1.institute())
+
+// Major Features
+// 1. Variable Declaration
+// 2. Normal Function
+// 3. Five Data Types
+// 4. Control Statement
+// 5. Array & Object
+// 6. Prototype
+// 7. String Manipulation method
+// 8. Global Methods
+// 9. try & catch
