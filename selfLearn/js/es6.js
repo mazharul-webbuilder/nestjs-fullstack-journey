@@ -49,7 +49,7 @@ function babyName(name = 'Zayaan'){
 console.log(babyName('Ayaan'))
 
 // Modules
-import { greetNew } from './greet.js';
+import { greetNew } from './module/greet.js';
 
 console.log(greetNew('Zayaan Baby'))
 
