@@ -1,0 +1,9 @@
+include layout/header
+h1 Welcome To Home Page
+if(user.isUserLoggedIn)
+    p.classname#idname #{name}
+    p #{city}
+    img(src = "pexels-mammiya-29879483.jpg", alt="Testing image")
+else
+    p User is not longed in
+include layout/footer
