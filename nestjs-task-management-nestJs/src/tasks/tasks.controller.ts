@@ -1,4 +1,4 @@
-import {Body, Controller, Delete, Get, Param, Post} from '@nestjs/common';
+import { Body, Controller, Delete, Get, NotFoundException, Param, Post } from '@nestjs/common';
 import {TasksService} from "./tasks.service";
 import {Task} from "./task.model";
 import {CreateTaskDto} from "./dto/create-task.dto";
@@ -11,13 +11,22 @@ export class TasksController {
     }
 
     @Get()
-    getAllTasks(): Task[] {
-        return this.taskService.getAllTasks()
+    getAllTasks():  Task[]  {
+        const tasks: Task[] = this.taskService.getAllTasks()
+
+        if (tasks.length === 0) {
+            throw new NotFoundException('No tasks found.');
+        }
+       return tasks
     }
 
     @Get('/:id')
     getTaskById(@Param('id') id: string): Task {
-        return this.taskService.getTaskById(id);
+        const task: Task = this.taskService.getTaskById(id);
+        if (!task) {
+            throw new NotFoundException("Task not found");
+        }
+       return task;
     }
 
     @Post()
