@@ -1,10 +1,7 @@
-import { Body, Controller, Delete, Get, NotFoundException, Param, Post, Put } from '@nestjs/common';
+import { Body, Controller, Delete, Get, NotFoundException, Param, Patch, Post } from '@nestjs/common';
 import {TasksService} from "./tasks.service";
-import {Task} from "./task.model";
+import { Task, TaskStatus } from './task.model';
 import {CreateTaskDto} from "./dto/create-task.dto";
-import {json} from "express";
-import * as http from "node:http";
-import { UpdateTaskDto } from './dto/update-task.dto';
 
 @Controller('tasks')
 export class TasksController {
@@ -35,9 +32,11 @@ export class TasksController {
         return this.taskService.createTask(createTaskDto)
     }
 
-    @Put('/:id')
-    updateTask(@Body() updateTaskDto: UpdateTaskDto, @Param('id') id: string): Task{
-        const updatedTask: Task = this.taskService.updateTask(updateTaskDto, id);
+    @Patch('/:id/:status')
+    updateTask(@Param('id') id: string, @Param('status') status: TaskStatus): Task{
+
+        const updatedTask: Task = this.taskService.updateTask(id, status);
+
         if (!updatedTask) {
             throw new NotFoundException('Something went wrong');
         }
@@ -47,13 +46,7 @@ export class TasksController {
 
     @Delete('/:id')
     deleteTaskById(@Param('id') id: string) {
-        const deletedTask =  this.taskService.deleteTaskById(id)
-        if (deletedTask) {
-            return ({
-                'message': 'Task Deleted Successful',
-                deletedTask
-            })
-        }
+        this.taskService.deleteTaskById(id)
     }
 
 }
