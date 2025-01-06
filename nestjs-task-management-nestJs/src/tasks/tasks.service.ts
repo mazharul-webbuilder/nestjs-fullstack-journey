@@ -36,7 +36,11 @@ export class TasksService {
    Return single Task by Id
    */
   getTaskById(id: string): Task {
-    return this.tasks.find(task => task.id === id);
+    const found = this.tasks.find(task => task.id === id);
+    if (!found) {
+      throw new NotFoundException(`Task with id ${id} not found`);
+    }
+    return found;
   }
 
   /***
@@ -74,6 +78,8 @@ export class TasksService {
    Delete a task by ID
    */
   deleteTaskById(id: string): void {
+    const found = this.getTaskById(id);
+
     this.tasks = this.tasks.filter(task => task.id !== id);
   }
 }
