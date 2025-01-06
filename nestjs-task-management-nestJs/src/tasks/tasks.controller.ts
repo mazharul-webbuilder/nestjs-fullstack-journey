@@ -1,16 +1,23 @@
-import { Body, Controller, Delete, Get, NotFoundException, Param, Patch, Post } from '@nestjs/common';
+import { Body, Controller, Delete, Get, NotFoundException, Param, Patch, Post, Query } from '@nestjs/common';
 import {TasksService} from "./tasks.service";
 import { Task, TaskStatus } from './task.model';
 import {CreateTaskDto} from "./dto/create-task.dto";
+import { GetTasksFilterDto } from './dto/get-tasks-filter.dto';
 
 @Controller('tasks')
 export class TasksController {
     constructor(private taskService: TasksService) {
     }
 
+
     @Get()
-    getAllTasks():  Task[]  {
-        const tasks: Task[] = this.taskService.getAllTasks()
+    getTasks(@Query() filterDto: GetTasksFilterDto):  Task[]  {
+        let tasks: Task[];
+        if (Object.keys(filterDto).length) {
+            tasks = this.taskService.getTaskWithFilters(filterDto);
+        } else {
+            tasks = this.taskService.getAllTasks();
+        }
 
         if (tasks.length === 0) {
             throw new NotFoundException('No tasks found.');
