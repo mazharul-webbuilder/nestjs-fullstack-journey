@@ -42,7 +42,7 @@ export class TasksService {
   /***
    Update Task by id
    */
-  updateTask(id: string, status: TaskStatus): Task {
+  updateTaskStatus(id: string, status: TaskStatus): Task {
     const updatedTask: Task = this.tasks.find(task => task.id === id);
     if (!updatedTask) {
       throw new NotFoundException('Task not found');

@@ -32,10 +32,10 @@ export class TasksController {
         return this.taskService.createTask(createTaskDto)
     }
 
-    @Patch('/:id/:status')
-    updateTask(@Param('id') id: string, @Param('status') status: TaskStatus): Task{
+    @Patch('/:id/status')
+    updateTaskStatus(@Param('id') id: string, @Body('status') status: TaskStatus): Task{
 
-        const updatedTask: Task = this.taskService.updateTask(id, status);
+        const updatedTask: Task = this.taskService.updateTaskStatus(id, status);
 
         if (!updatedTask) {
             throw new NotFoundException('Something went wrong');
