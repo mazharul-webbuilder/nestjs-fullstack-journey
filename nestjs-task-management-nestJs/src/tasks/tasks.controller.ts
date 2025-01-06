@@ -1,40 +1,72 @@
-import {Body, Controller, Delete, Get, Param, Post} from '@nestjs/common';
-import {TasksService} from "./tasks.service";
-import {Task} from "./task.model";
-import {CreateTaskDto} from "./dto/create-task.dto";
-import {json} from "express";
-import * as http from "node:http";
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  NotFoundException,
+  Param,
+  Patch,
+  Post,
+  Query, UsePipes,
+  ValidationPipe,
+} from '@nestjs/common';
+import { TasksService } from './tasks.service';
+import { Task, TaskStatus } from './task.model';
+import { CreateTaskDto } from './dto/create-task.dto';
+import { GetTasksFilterDto } from './dto/get-tasks-filter.dto';
+import { TaskStatusValidationPipe } from './pipes/task-status-validation.pipe';
 
 @Controller('tasks')
 export class TasksController {
-    constructor(private taskService: TasksService) {
-    }
-
-    @Get()
-    getAllTasks(): Task[] {
-        return this.taskService.getAllTasks()
-    }
-
-    @Get('/:id')
-    getTaskById(@Param('id') id: string): Task {
-        return this.taskService.getTaskById(id);
-    }
-
-    @Post()
-    createTask(@Body() createTaskDto: CreateTaskDto): Task {
-        return this.taskService.createTask(createTaskDto)
-    }
+  constructor(private taskService: TasksService) {
+  }
 
 
-    @Delete('/:id')
-    deleteTaskById(@Param('id') id: string) {
-        const deletedTask =  this.taskService.deleteTaskById(id)
-        if (deletedTask) {
-            return ({
-                'message': 'Task Deleted Successful',
-                deletedTask
-            })
-        }
+  @Get()
+  getTasks(@Query(ValidationPipe) filterDto: GetTasksFilterDto): Task[] {
+    let tasks: Task[];
+    if (Object.keys(filterDto).length) {
+      tasks = this.taskService.getTaskWithFilters(filterDto);
+    } else {
+      tasks = this.taskService.getAllTasks();
     }
+
+    if (tasks.length === 0) {
+      throw new NotFoundException('No tasks found.');
+    }
+    return tasks;
+  }
+
+  @Get('/:id')
+  getTaskById(@Param('id') id: string): Task {
+    const task: Task = this.taskService.getTaskById(id);
+    if (!task) {
+      throw new NotFoundException('Task not found');
+    }
+    return task;
+  }
+
+  @Post()
+  @UsePipes(ValidationPipe)
+  createTask(@Body() createTaskDto: CreateTaskDto): Task {
+    return this.taskService.createTask(createTaskDto);
+  }
+
+  @Patch('/:id/status')
+  updateTaskStatus(@Param('id') id: string, @Body('status', TaskStatusValidationPipe) status: TaskStatus): Task {
+
+    const updatedTask: Task = this.taskService.updateTaskStatus(id, status);
+
+    if (!updatedTask) {
+      throw new NotFoundException('Something went wrong');
+    }
+    return updatedTask;
+  }
+
+
+  @Delete('/:id')
+  deleteTaskById(@Param('id') id: string) {
+    this.taskService.deleteTaskById(id);
+  }
 
 }
