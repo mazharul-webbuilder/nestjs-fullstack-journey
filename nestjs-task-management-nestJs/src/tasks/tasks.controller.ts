@@ -1,9 +1,10 @@
-import { Body, Controller, Delete, Get, NotFoundException, Param, Post } from '@nestjs/common';
+import { Body, Controller, Delete, Get, NotFoundException, Param, Post, Put } from '@nestjs/common';
 import {TasksService} from "./tasks.service";
 import {Task} from "./task.model";
 import {CreateTaskDto} from "./dto/create-task.dto";
 import {json} from "express";
 import * as http from "node:http";
+import { UpdateTaskDto } from './dto/update-task.dto';
 
 @Controller('tasks')
 export class TasksController {
@@ -32,6 +33,15 @@ export class TasksController {
     @Post()
     createTask(@Body() createTaskDto: CreateTaskDto): Task {
         return this.taskService.createTask(createTaskDto)
+    }
+
+    @Put('/:id')
+    updateTask(@Body() updateTaskDto: UpdateTaskDto, @Param('id') id: string): Task{
+        const updatedTask: Task = this.taskService.updateTask(updateTaskDto, id);
+        if (!updatedTask) {
+            throw new NotFoundException('Something went wrong');
+        }
+        return updatedTask;
     }
 
 
