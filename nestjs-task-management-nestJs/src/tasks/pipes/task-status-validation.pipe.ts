@@ -6,7 +6,7 @@ export class TaskStatusValidationPipe implements PipeTransform {
   readonly allowedStatus: string[] = [
     TaskStatus.OPEN,
     TaskStatus.IN_PROGRESS,
-    TaskStatus.DONE
+    TaskStatus.DONE,
   ];
 
   transform(value: any, metadata: ArgumentMetadata): any {
